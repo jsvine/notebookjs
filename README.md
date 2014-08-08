@@ -1,6 +1,6 @@
 # Notebook.js
 
-Notebook.js parses raw [IPython](http://ipython.org/)/[Jupyter](http://jupyter.org/) notebooks, and lets you render as HTML. See the __[working demo here](https://jsvine.github.io/notebookjs/demo/)__.
+Notebook.js parses raw [IPython](http://ipython.org/)/[Jupyter](http://jupyter.org/) notebooks, and lets you render them as HTML. See the __[working demo here](https://jsvine.github.io/notebookjs/demo/)__.
 
 ## Usage
 
