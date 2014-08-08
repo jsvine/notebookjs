@@ -9,7 +9,8 @@
     var base_api_url = "https://api.github.com/repos/";
 
     var base64_to_json = function (b64) {
-        return JSON.parse(root.atob(b64));
+        var json_string = root.atob(b64.replace(/\n/g, ""));
+        return JSON.parse(json_string);
     }; 
 
     var get_tree = function (url, callback) {
