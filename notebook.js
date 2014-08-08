@@ -4,7 +4,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.0.0";
+    var VERSION = "0.0.1";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
@@ -57,6 +57,7 @@
     };
 
     nb.Input.prototype.render = function () {
+        if (!this.raw.length) { return makeElement("div"); }
         var holder = makeElement("div", [ "input" ]);
         var prompt_number = this.cell.raw.prompt_number;
         if (prompt_number) {

@@ -9,5 +9,5 @@
     "dependencies" : [ "jsdom", "marked", "ansi_up" ],
     "repository" : {"type": "git", "url": "git://github.com/jsvine/notebookjs.git"},
     "main" : "notebook.js",
-    "version" : "0.0.0"
+    "version" : "0.0.1"
 }
