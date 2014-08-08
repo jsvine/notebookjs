@@ -1,0 +1,13 @@
+{
+    "name" : "notebookjs",
+    "description" : "Parse and render IPython/Jupyter notebooks.",
+    "homepage" : "https://github.com/jsvine/notebookjs",
+    "keywords" : ["ipython", "jupyter" ],
+    "author" : "Jeremy Singer-Vine <jsvine@gmail.com>",
+    "contributors" : [],
+    "license": "MIT",
+    "dependencies" : [ "jsdom", "marked", "ansi_up" ],
+    "repository" : {"type": "git", "url": "git://github.com/jsvine/notebookjs.git"},
+    "main" : "notebook.js",
+    "version" : "0.0.0"
+}

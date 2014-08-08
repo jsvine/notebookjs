@@ -1,0 +1,27 @@
+body {
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+#main {
+    width: 99%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+#controls {
+    border-bottom: 1px dashed #CCC;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#github-url {
+    width: 400px; 
+    margin: 0 auto;
+}
+
+#loading {
+    width: 60px;
+    margin: 1em auto;
+    display: none;
+}
