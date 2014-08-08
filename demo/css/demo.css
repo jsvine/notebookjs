@@ -20,6 +20,13 @@ body {
     margin: 0 auto;
 }
 
+@media (max-width: 600px) {
+    #github-url {
+        width: 90%;
+        display: block;
+    }
+}
+
 #loading {
     width: 60px;
     margin: 1em auto;
