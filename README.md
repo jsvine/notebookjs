@@ -49,3 +49,7 @@ To support other Markdown or ANSI-coloring engines, set `nb.markdown` and/or `nb
 ## MathJax and Code-Highlighting
 
 Notebook.js doesn't have any special support for pre-rendering mathematical notation via MathJax, or highlighting/styling code-blocks, but plays well with those libraries. See [the demo code](demo/js/demo.js) for an example.
+
+## Styling Rendered Notebooks
+
+The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. The demo contains a [simple-but-effective example](demo/css/notebook.css).
