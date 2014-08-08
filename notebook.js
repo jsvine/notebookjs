@@ -1,4 +1,4 @@
-// notebook.js 0.0.0
+// notebook.js 0.0.1
 // http://github.com/jsvine/notebookjs
 // (c) 2014 Jeremy Singer-Vine
 // notebook.js may be freely distributed under the MIT license.
