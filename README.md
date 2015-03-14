@@ -22,7 +22,9 @@ var rendered = notebook.render();
 document.body.appendChild(rendered);
 ```
 
-### Node.js Usage
+### IO.js Usage
+
+*Note: To take advantage of `jsdom`'s latest features/bugfixes, `notebook.js` now runs on [io.js](https://iojs.org/) instead of Node.js.*
 
 To install:
 
@@ -30,7 +32,7 @@ To install:
 npm install notebookjs
 ```
 
-Then parse, render, and (perhaps) print:
+Then parse, render, and write:
 
 ```js
 var fs = require ("fs");

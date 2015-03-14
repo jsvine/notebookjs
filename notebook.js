@@ -98,10 +98,7 @@
     };
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
-        var raw = svg.join("");
-        // Fix for self-closing tags, which jsdom strips.
-        var replaced = raw.replace(/<([^ ]+)([^<>]+)\/>/g, "<$1$2></$1>");
-        el.innerHTML = replaced;
+        el.innerHTML = svg.join("");
         return el;
     };
     nb.display.latex = function (latex) {
