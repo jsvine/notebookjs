@@ -1,6 +1,6 @@
 # Notebook.js
 
-Notebook.js parses raw [IPython](http://ipython.org/)/[Jupyter](http://jupyter.org/) notebooks, and lets you render them as HTML. See the __[working demo here](https://jsvine.github.io/notebookjs/demo/)__.
+Notebook.js parses raw [IPython](http://ipython.org/)/[Jupyter](http://jupyter.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
 ## Usage
 
@@ -40,16 +40,39 @@ var notebook = nb.parse(ipynb);
 console.log(notebook.render().outerHTML);
 ```
 
-## Support for Markdown and ANSI-coloring
+## Markdown and ANSI-coloring
 
 By default, notebook.js supports [marked](https://github.com/chjj/marked) for Markdown rendering, and [ansi_up](https://github.com/drudru/ansi_up) for ANSI-coloring. It does not, however, ship with those libraries, so you must `<script>`-include or `require` them before initializing notebook.js.
 
 To support other Markdown or ANSI-coloring engines, set `nb.markdown` and/or `nb.ansi` to functions that accept raw text and return rendered text.
 
-## MathJax and Code-Highlighting
+## Code-Highlighting
 
-Notebook.js doesn't have any special support for pre-rendering mathematical notation via MathJax, or highlighting/styling code-blocks, but plays well with those libraries. See [the demo code](demo/js/demo.js) for an example.
+Notebook.js plays well with code-highlighting libraries. See [NBPreview](https://github.com/jsvine/nbpreview) for an example of how to add support for your preferred highlighter.
+
+## MathJax 
+
+To add support for mathematical notation via MathJax insert the following into your HTML page's `<head>` tag:
+
+```html
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true,
+        processEnvironments: true
+    },
+    displayAlign: 'center',
+    "HTML-CSS": {
+        styles: {'.MathJax_Display': {"margin": 0}},
+        linebreaks: { automatic: true }
+    }
+});
+</script>
+```
 
 ## Styling Rendered Notebooks
 
-The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. The demo contains a [simple-but-effective example](demo/css/notebook.css).
+The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. See [NBPreview](https://github.com/jsvine/nbpreview/css) for an example implementation.
