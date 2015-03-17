@@ -4,7 +4,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.0.1";
+    var VERSION = "0.2.0";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
@@ -59,14 +59,15 @@
     nb.Input.prototype.render = function () {
         if (!this.raw.length) { return makeElement("div"); }
         var holder = makeElement("div", [ "input" ]);
-        var prompt_number = this.cell.raw.prompt_number;
-        if (prompt_number) {
-            holder.setAttribute("data-prompt-number", prompt_number);
+        var cell = this.cell;
+        if (cell.number > -1) {
+            holder.setAttribute("data-prompt-number", this.cell.number);
         }
         var pre_el = makeElement("pre");
         var code_el = makeElement("code");
-        var notebook = this.cell.worksheet.notebook;
-        var lang = notebook.metadata.language || this.cell.raw.language;
+        var notebook = cell.worksheet.notebook;
+        var m = notebook.metadata;
+        var lang = this.cell.raw.language || m.language || m.language_info.name;
         code_el.setAttribute("data-language", lang);
         code_el.className = "lang-" + lang;
         code_el.innerHTML = escapeHTML(this.raw.join(""));
@@ -147,8 +148,14 @@
             return el;
         },
         "stream": function () {
-            var el = makeElement("pre", [ this.raw.stream ]);
+            var el = makeElement("pre", [ (this.raw.stream || this.raw.name) ]);
             var raw = this.raw.text.join("");
+            el.innerHTML = nb.ansi(raw);
+            return el;
+        },
+        "execute_result": function () {
+            var el = makeElement("pre", [ "stdout" ]);
+            var raw = this.raw.data["text/plain"].join("");
             el.innerHTML = nb.ansi(raw);
             return el;
         }
@@ -156,9 +163,8 @@
 
     nb.Output.prototype.render = function () {
         var outer = makeElement("div", [ "output" ]);
-        var prompt_number = this.cell.raw.prompt_number;
-        if (prompt_number) {
-            outer.setAttribute("data-prompt-number", prompt_number);
+        if (this.cell.number > -1) {
+            outer.setAttribute("data-prompt-number", this.cell.number);
         }
         var inner = this.renderers[this.type].call(this); 
         outer.appendChild(inner);
@@ -191,7 +197,9 @@
         cell.worksheet = worksheet;
         cell.type = raw.cell_type;
         if (cell.type === "code") {
-            cell.input = new nb.Input(cell.raw.input, cell);
+            cell.number = raw.prompt_number > -1 ? raw.prompt_number : raw.execution_count;
+            var source = raw.input || raw.source;
+            cell.input = new nb.Input(source, cell);
             var raw_outputs = (cell.raw.outputs || []).map(function (o) {
                 return new nb.Output(o, cell); 
             });
@@ -251,7 +259,8 @@
         this.config = config;
         var meta = this.metadata = raw.metadata;
         this.title = meta.title || meta.name;
-        this.worksheets = raw.worksheets.map(function (ws) {
+        var _worksheets = raw.worksheets || [ { cells: raw.cells } ]
+        this.worksheets = _worksheets.map(function (ws) {
             return new nb.Worksheet(ws, notebook);
         });
         this.sheet = this.worksheets[0];
