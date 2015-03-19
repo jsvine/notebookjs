@@ -54,26 +54,7 @@ Notebook.js plays well with code-highlighting libraries. See [NBPreview](https:/
 
 ## MathJax 
 
-To add support for mathematical notation via MathJax insert the following into your HTML page's `<head>` tag:
-
-```html
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-        processEscapes: true,
-        processEnvironments: true
-    },
-    displayAlign: 'center',
-    "HTML-CSS": {
-        styles: {'.MathJax_Display': {"margin": 0}},
-        linebreaks: { automatic: true }
-    }
-});
-</script>
-```
+Notebook.js currently doesn't support MathJax. (Markdown-parsing was interfering was causing problems.) Implementation suggestions welcome.
 
 ## Styling Rendered Notebooks
 
