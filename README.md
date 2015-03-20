@@ -54,7 +54,7 @@ Notebook.js plays well with code-highlighting libraries. See [NBPreview](https:/
 
 ## MathJax 
 
-Notebook.js currently doesn't support MathJax. (Markdown-parsing was interfering was causing problems.) Implementation suggestions welcome.
+Notebook.js currently doesn't support MathJax. Implementation suggestions welcome. (Markdown-parsing was interfering with prior attempts.)
 
 ## Styling Rendered Notebooks
 
