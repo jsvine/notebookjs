@@ -4,7 +4,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.2.0";
+    var VERSION = "0.2.1";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
@@ -25,6 +25,14 @@
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;");
         return replaced;
+    };
+
+    var joinText = function (text) {
+        if (text.join) {
+            return text.join("");    
+        } else {
+            return text;    
+        } 
     };
 
     // Get supporting libraries
@@ -70,7 +78,7 @@
         var lang = this.cell.raw.language || m.language || m.language_info.name;
         code_el.setAttribute("data-language", lang);
         code_el.className = "lang-" + lang;
-        code_el.innerHTML = escapeHTML(this.raw.join(""));
+        code_el.innerHTML = escapeHTML(joinText(this.raw));
         pre_el.appendChild(code_el);
         holder.appendChild(pre_el);
         this.el = holder;
@@ -89,22 +97,22 @@
     nb.display = {};
     nb.display.text = function (text) {
         var el = makeElement("pre", [ "text-output" ]);
-        el.innerHTML = escapeHTML(text.join(""));
+        el.innerHTML = escapeHTML(joinText(text));
         return el;
     };
     nb.display.html = function (html) {
         var el = makeElement("div", [ "html-output" ]);
-        el.innerHTML = html.join("");
+        el.innerHTML = joinText(html);
         return el;
     };
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
-        el.innerHTML = svg.join("");
+        el.innerHTML = joinText(svg);
         return el;
     };
     nb.display.latex = function (latex) {
         var el = makeElement("div", [ "latex-output" ]);
-        el.innerHTML = latex.join("");
+        el.innerHTML = join(latex);
         return el;
     };
     nb.display.javascript = function (js) {
@@ -133,6 +141,13 @@
         }
     };
 
+    var render_error = function () {
+        var el = makeElement("pre", [ "pyerr" ]);
+        var raw = this.raw.traceback.join("\n");
+        el.innerHTML = nb.ansi(escapeHTML(raw));
+        return el;
+    };
+
     nb.Output = function (raw, cell) {
         this.raw = raw; 
         this.cell = cell;
@@ -142,21 +157,18 @@
     nb.Output.prototype.renderers = {
         "display_data": render_display_data,
         "pyout": render_display_data,
-        "pyerr": function () {
-            var el = makeElement("pre", [ "pyerr" ]);
-            el.innerHTML = nb.ansi(this.raw.traceback.join(""));
-            return el;
-        },
+        "pyerr": render_error,
+        "error": render_error,
         "stream": function () {
             var el = makeElement("pre", [ (this.raw.stream || this.raw.name) ]);
-            var raw = this.raw.text.join("");
-            el.innerHTML = nb.ansi(raw);
+            var raw = joinText(this.raw.text);
+            el.innerHTML = nb.ansi(escapeHTML(raw));
             return el;
         },
         "execute_result": function () {
             var el = makeElement("pre", [ "stdout" ]);
-            var raw = this.raw.data["text/plain"].join("");
-            el.innerHTML = nb.ansi(raw);
+            var raw = joinText(this.raw.data["text/plain"]);
+            el.innerHTML = nb.ansi(escapeHTML(raw));
             return el;
         }
     };
@@ -198,7 +210,7 @@
         cell.type = raw.cell_type;
         if (cell.type === "code") {
             cell.number = raw.prompt_number > -1 ? raw.prompt_number : raw.execution_count;
-            var source = raw.input || raw.source;
+            var source = raw.input || [ raw.source ];
             cell.input = new nb.Input(source, cell);
             var raw_outputs = (cell.raw.outputs || []).map(function (o) {
                 return new nb.Output(o, cell); 
@@ -210,12 +222,12 @@
     nb.Cell.prototype.renderers = {
         markdown: function () {
             var el = makeElement("div", [ "cell", "markdown-cell" ]);
-            el.innerHTML = nb.markdown(this.raw.source.join(""));
+            el.innerHTML = nb.markdown(joinText(this.raw.source));
             return el;
         },
         heading: function () {
             var el = makeElement("h" + this.raw.level, [ "cell", "heading-cell" ]);
-            el.innerHTML = this.raw.source.join("");
+            el.innerHTML = joinText(this.raw.source);
             return el;
         },
         code: function () {
