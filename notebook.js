@@ -4,7 +4,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.2.1";
+    var VERSION = "0.2.2";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
@@ -29,7 +29,7 @@
 
     var joinText = function (text) {
         if (text.join) {
-            return text.join("");    
+            return text.map(joinText).join("");
         } else {
             return text;    
         } 
@@ -68,7 +68,7 @@
         if (!this.raw.length) { return makeElement("div"); }
         var holder = makeElement("div", [ "input" ]);
         var cell = this.cell;
-        if (cell.number > -1) {
+        if (typeof cell.number === "number") {
             holder.setAttribute("data-prompt-number", this.cell.number);
         }
         var pre_el = makeElement("pre");
@@ -100,42 +100,57 @@
         el.innerHTML = escapeHTML(joinText(text));
         return el;
     };
+    nb.display["text/plain"] = nb.display.text;
+
     nb.display.html = function (html) {
         var el = makeElement("div", [ "html-output" ]);
         el.innerHTML = joinText(html);
         return el;
     };
+    nb.display["text/html"] = nb.display.html;
+
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
         el.innerHTML = joinText(svg);
         return el;
     };
+    nb.display["text/svg+xml"] = nb.display.svg;
+
     nb.display.latex = function (latex) {
         var el = makeElement("div", [ "latex-output" ]);
         el.innerHTML = join(latex);
         return el;
     };
+    nb.display["text/latex"] = nb.display.latex;
+
     nb.display.javascript = function (js) {
         var el = makeElement("script");
         script.innerHTML = js;
         return el;
     };
+    nb.display["application/javascript"] = nb.display.javascript;
+
     nb.display.png = imageCreator("png");
+    nb.display["image/png"] = nb.display.png;
     nb.display.jpeg = imageCreator("jpeg");
+    nb.display["image/jpeg"] = nb.display.jpeg;
 
     nb.display_priority = [
-        "png", "jpeg", "svg", "html",
-        "latex", "javascript", "text"
+        "png", "image/png", "jpeg", "image/jpeg",
+        "svg", "text/svg+xml", "html", "text/html",
+        "text/markdown", "latex", "text/latex",
+        "javascript", "application/javascript",
+        "text", "text/plain"
     ];
 
     var render_display_data = function () {
         var o = this;
         var formats = nb.display_priority.filter(function (d) {
-            return o.raw[d];
+            return o.raw.data ? o.raw.data[d] : o.raw[d];
         });
         var format = formats[0];
         if (format) {
-            return nb.display[format](o.raw[format]);
+            return nb.display[format](o.raw[format] || o.raw.data[format]);
         } else {
             return makeElement("div", [ "empty-output" ]);
         }
@@ -156,6 +171,7 @@
 
     nb.Output.prototype.renderers = {
         "display_data": render_display_data,
+        "execute_result": render_display_data,
         "pyout": render_display_data,
         "pyerr": render_error,
         "error": render_error,
@@ -164,18 +180,12 @@
             var raw = joinText(this.raw.text);
             el.innerHTML = nb.ansi(escapeHTML(raw));
             return el;
-        },
-        "execute_result": function () {
-            var el = makeElement("pre", [ "stdout" ]);
-            var raw = joinText(this.raw.data["text/plain"]);
-            el.innerHTML = nb.ansi(escapeHTML(raw));
-            return el;
         }
     };
 
     nb.Output.prototype.render = function () {
         var outer = makeElement("div", [ "output" ]);
-        if (this.cell.number > -1) {
+        if (typeof this.cell.number === "number") {
             outer.setAttribute("data-prompt-number", this.cell.number);
         }
         var inner = this.renderers[this.type].call(this); 
