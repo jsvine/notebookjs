@@ -4,7 +4,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.2.2";
+    var VERSION = "0.2.3";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
@@ -89,7 +89,7 @@
     var imageCreator = function (format) {
         return function (data) {
             var el = makeElement("img", [ "image-output" ]);
-            el.src = "data:image/" + format + ";base64," + data.replace(/\n/g, "");
+            el.src = "data:image/" + format + ";base64," + joinText(data).replace(/\n/g, "");
             return el;
         };
     };
