@@ -1,10 +1,10 @@
-// notebook.js 0.2.1
+// notebook.js 0.2.4
 // http://github.com/jsvine/notebookjs
-// (c) 2014 Jeremy Singer-Vine
+// (c) 2014-2015 Jeremy Singer-Vine
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.2.3";
+    var VERSION = "0.2.4";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
@@ -237,6 +237,11 @@
         },
         heading: function () {
             var el = makeElement("h" + this.raw.level, [ "cell", "heading-cell" ]);
+            el.innerHTML = joinText(this.raw.source);
+            return el;
+        },
+        raw: function () {
+            var el = makeElement("div", [ "cell", "raw-cell" ]);
             el.innerHTML = joinText(this.raw.source);
             return el;
         },
