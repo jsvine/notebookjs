@@ -109,6 +109,11 @@
     };
     nb.display["text/html"] = nb.display.html;
 
+    nb.display.marked = function(md) {
+        return nb.display.html(nb.markdown(joinText(md)));
+    };
+    nb.display["text/markdown"] = nb.display.marked;
+    
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
         el.innerHTML = joinText(svg);
@@ -150,10 +155,11 @@
         });
         var format = formats[0];
         if (format) {
-            return nb.display[format](o.raw[format] || o.raw.data[format]);
-        } else {
-            return makeElement("div", [ "empty-output" ]);
+            if (nb.display[format]) {
+                return nb.display[format](o.raw[format] || o.raw.data[format]);
+            }
         }
+        return makeElement("div", [ "empty-output" ]);
     };
 
     var render_error = function () {
@@ -286,7 +292,7 @@
         this.config = config;
         var meta = this.metadata = raw.metadata;
         this.title = meta.title || meta.name;
-        var _worksheets = raw.worksheets || [ { cells: raw.cells } ]
+        var _worksheets = raw.worksheets || [ { cells: raw.cells } ];
         this.worksheets = _worksheets.map(function (ws) {
             return new nb.Worksheet(ws, notebook);
         });
