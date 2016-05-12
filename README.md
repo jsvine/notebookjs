@@ -1,4 +1,4 @@
-# Notebook.js
+# notebook.js `v0.2.5`
 
 Notebook.js parses raw [IPython](http://ipython.org/)/[Jupyter](http://jupyter.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
@@ -59,3 +59,9 @@ Notebook.js currently doesn't support MathJax. Implementation suggestions welcom
 ## Styling Rendered Notebooks
 
 The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. See [NBPreview](https://github.com/jsvine/nbpreview/css) for an example implementation.
+
+## Thanks
+
+Many thanks to the following users for catching bugs, fixing typos, and proposing useful features:
+
+- [@bradhowes](https://github.com/bradhowes)

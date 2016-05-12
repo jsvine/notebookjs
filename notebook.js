@@ -1,10 +1,9 @@
-// notebook.js 0.2.4
+// notebook.js 0.2.5
 // http://github.com/jsvine/notebookjs
-// (c) 2014-2015 Jeremy Singer-Vine
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.2.4";
+    var VERSION = "0.2.5";
 
     // Get browser or JSDOM document
     var doc = root.document || require("jsdom").jsdom();
