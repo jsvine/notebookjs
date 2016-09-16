@@ -3,6 +3,10 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
+    if ( typeof require === "function" ) {
+      root.marked = require('marked');
+      root.ansi_up = require('ansi_up');
+    }
     var VERSION = "0.2.5";
 
     // Get browser or JSDOM document
@@ -129,7 +133,7 @@
 
     nb.display.javascript = function (js) {
         var el = makeElement("script");
-        script.innerHTML = js;
+        el.innerHTML = js;
         return el;
     };
     nb.display["application/javascript"] = nb.display.javascript;
