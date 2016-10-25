@@ -1,4 +1,4 @@
-// notebook.js 0.2.5
+// notebook.js 0.2.6
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
@@ -122,7 +122,7 @@
 
     nb.display.latex = function (latex) {
         var el = makeElement("div", [ "latex-output" ]);
-        el.innerHTML = join(latex);
+        el.innerHTML = joinText(latex);
         return el;
     };
     nb.display["text/latex"] = nb.display.latex;
