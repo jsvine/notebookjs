@@ -17,7 +17,7 @@
             return nb.prefix + cn;
         }).join(" ");
         return el;
-    }; 
+    };
 
     var escapeHTML = function (raw) {
         var replaced = raw
@@ -30,8 +30,8 @@
         if (text.join) {
             return text.map(joinText).join("");
         } else {
-            return text;    
-        } 
+            return text;
+        }
     };
 
     // Get supporting libraries
@@ -40,12 +40,12 @@
     };
 
     var getMarkdown = function () {
-        return root.marked || condRequire("marked"); 
+        return root.marked || condRequire("marked");
     };
 
     var getAnsi = function () {
         var req = condRequire("ansi_up");
-        var lib = root.ansi_up || req; 
+        var lib = root.ansi_up || req;
         return lib && lib.ansi_to_html;
     };
 
@@ -59,7 +59,7 @@
 
     // Inputs
     nb.Input = function (raw, cell) {
-        this.raw = raw; 
+        this.raw = raw;
         this.cell = cell;
     };
 
@@ -82,7 +82,7 @@
         holder.appendChild(pre_el);
         this.el = holder;
         return holder;
-    }; 
+    };
 
     // Outputs and output-renderers
     var imageCreator = function (format) {
@@ -112,7 +112,7 @@
         return nb.display.html(nb.markdown(joinText(md)));
     };
     nb.display["text/markdown"] = nb.display.marked;
-    
+
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
         el.innerHTML = joinText(svg);
@@ -169,7 +169,7 @@
     };
 
     nb.Output = function (raw, cell) {
-        this.raw = raw; 
+        this.raw = raw;
         this.cell = cell;
         this.type = raw.output_type;
     };
@@ -193,7 +193,7 @@
         if (typeof this.cell.number === "number") {
             outer.setAttribute("data-prompt-number", this.cell.number);
         }
-        var inner = this.renderers[this.type].call(this); 
+        var inner = this.renderers[this.type].call(this);
         outer.appendChild(inner);
         this.el = outer;
         return outer;
@@ -228,7 +228,7 @@
             var source = raw.input || [ raw.source ];
             cell.input = new nb.Input(source, cell);
             var raw_outputs = (cell.raw.outputs || []).map(function (o) {
-                return new nb.Output(o, cell); 
+                return new nb.Output(o, cell);
             });
             cell.outputs = nb.coalesceStreams(raw_outputs);
         }
@@ -237,7 +237,14 @@
     nb.Cell.prototype.renderers = {
         markdown: function () {
             var el = makeElement("div", [ "cell", "markdown-cell" ]);
+            // console.log(this.raw.source);
+            this.raw.source.map((src) => {
+              if(src.indexOf("$$") != -1) {
+                console.log(src);
+              }
+            })
             el.innerHTML = nb.markdown(joinText(this.raw.source));
+            console.log(el);
             return el;
         },
         heading: function () {
@@ -261,7 +268,7 @@
     };
 
     nb.Cell.prototype.render = function () {
-        var el = this.renderers[this.type].call(this); 
+        var el = this.renderers[this.type].call(this);
         this.el = el;
         return el;
     };
@@ -277,7 +284,7 @@
         this.render = function () {
             var worksheet_el = makeElement("div", [ "worksheet" ]);
             worksheet.cells.forEach(function (c) {
-                worksheet_el.appendChild(c.render()); 
+                worksheet_el.appendChild(c.render());
             });
             this.el = worksheet_el;
             return worksheet_el;
@@ -301,12 +308,18 @@
     nb.Notebook.prototype.render = function () {
         var notebook_el = makeElement("div", [ "notebook" ]);
         this.worksheets.forEach(function (w) {
-            notebook_el.appendChild(w.render()); 
+            notebook_el.appendChild(w.render());
         });
+        renderMathInElement(notebook_el, {delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\\[", right: "\\]", display: true},
+          {left: "\\(", right: "\\)", display: false}
+        ]});
         this.el = notebook_el;
         return notebook_el;
     };
-    
+
     nb.parse = function (nbjson, config) {
         return new nb.Notebook(nbjson, config);
     };
@@ -325,5 +338,5 @@
     } else {
         root.nb = nb;
     }
-    
+
 }).call(this);
