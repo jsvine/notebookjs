@@ -310,12 +310,16 @@
         this.worksheets.forEach(function (w) {
             notebook_el.appendChild(w.render());
         });
-        renderMathInElement(notebook_el, {delimiters: [
-          {left: "$$", right: "$$", display: true},
-          {left: "$", right: "$", display: false},
-          {left: "\\[", right: "\\]", display: true},
-          {left: "\\(", right: "\\)", display: false}
-        ]});
+        // skip if not in a browser. TODO: tweak either renderMathInElement to
+        // take a document arg, or implement in markdown func.
+        if(document !== undefined) {
+          renderMathInElement(notebook_el, {delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false}
+          ]});
+        }
         this.el = notebook_el;
         return notebook_el;
     };
