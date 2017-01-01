@@ -237,14 +237,7 @@
     nb.Cell.prototype.renderers = {
         markdown: function () {
             var el = makeElement("div", [ "cell", "markdown-cell" ]);
-            // console.log(this.raw.source);
-            this.raw.source.map((src) => {
-              if(src.indexOf("$$") != -1) {
-                console.log(src);
-              }
-            })
             el.innerHTML = nb.markdown(joinText(this.raw.source));
-            console.log(el);
             return el;
         },
         heading: function () {
