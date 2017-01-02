@@ -27,6 +27,9 @@ export default {
         builtins(),
         babel({
             exclude: 'node_modules/**'
+        }),
+        uglify({
+            output: {"ascii_only": true}
         })
     ]
 };
