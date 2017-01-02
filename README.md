@@ -11,7 +11,7 @@ Notebook.js works in the browser and in Node.js. Usage is fairly straightforward
 First, provide access to `nb` via a script tag:
 
 ```html
-<script src="notebook.min.js"></script>
+<script src="notebook.browser.min.js"></script>
 ```
 
 Then parse, render, and (perhaps) append:
@@ -54,7 +54,7 @@ Notebook.js plays well with code-highlighting libraries. See [NBPreview](https:/
 
 ## MathJax
 
-Notebook.js currently doesn't support MathJax. Implementation suggestions welcome. (Markdown-parsing was interfering with prior attempts.)
+Notebook.js currently doesn't support all of MathJax's syntaxes (MathML, AsciiMath, LaTeX). It does however support a significant subset of LaTeX via [KaTeX](https://github.com/Khan/KaTeX).
 
 ## Styling Rendered Notebooks
 

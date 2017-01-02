@@ -11,7 +11,7 @@ export default {
     entry: 'notebook.js',
     dest: 'dist/notebook.min.js',
     moduleName: "nb",
-    format: "iife",
+    format: "umd",
     plugins: [
         json(),
         nodeResolve({
