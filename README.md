@@ -11,7 +11,7 @@ Notebook.js works in the browser and in Node.js. Usage is fairly straightforward
 First, provide access to `nb` via a script tag:
 
 ```html
-<script src="notebook.js"></script>
+<script src="notebook.min.js"></script>
 ```
 
 Then parse, render, and (perhaps) append:
@@ -52,7 +52,7 @@ To support other Markdown or ANSI-coloring engines, set `nb.markdown` and/or `nb
 
 Notebook.js plays well with code-highlighting libraries. See [NBPreview](https://github.com/jsvine/nbpreview) for an example of how to add support for your preferred highlighter.
 
-## MathJax 
+## MathJax
 
 Notebook.js currently doesn't support MathJax. Implementation suggestions welcome. (Markdown-parsing was interfering with prior attempts.)
 

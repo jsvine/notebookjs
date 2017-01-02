@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../dist/notebook.browser.min.js"></script>
+        <link rel="stylesheet" href="../node_modules/katex/dist/katex.min.css" />
+    </head>
+    <body>
+        <script>
+            fetch('Demo.ipynb').then(resp => resp.json())
+            .then((ipynb) => {
+                var notebook = nb.parse(ipynb);
+                var rendered = notebook.render();
+                document.body.appendChild(rendered);
+            })
+        </script>
+    </body>
+</html>

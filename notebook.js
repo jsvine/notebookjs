@@ -1,210 +1,160 @@
-// notebook.js 0.2.6
-// http://github.com/jsvine/notebookjs
-// notebook.js may be freely distributed under the MIT license.
-(function () {
-    var root = this;
-    var VERSION = "0.2.5";
+var VERSION = "0.2.6";
 
-    // Get browser or JSDOM document
-    var doc = root.document || require("jsdom").jsdom();
-
-    // Helper functions
-    var ident = function (x) { return x; };
-
-    var makeElement = function (tag, classNames) {
-        var el = doc.createElement(tag);
-        el.className = (classNames || []).map(function (cn) {
-            return nb.prefix + cn;
-        }).join(" ");
-        return el;
-    };
-
-    var escapeHTML = function (raw) {
-        var replaced = raw
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
-        return replaced;
-    };
-
-    var joinText = function (text) {
-        if (text.join) {
-            return text.map(joinText).join("");
-        } else {
-            return text;
-        }
-    };
-
-    // Get supporting libraries
-    var condRequire = function (module_name) {
-        return typeof require === "function" && require(module_name);
-    };
-
-    var getMarkdown = function () {
-        return root.marked || condRequire("marked");
-    };
-
-    var getAnsi = function () {
-        var req = condRequire("ansi_up");
-        var lib = root.ansi_up || req;
-        return lib && lib.ansi_to_html;
-    };
-
-    // Set up `nb` namespace
-    var nb = {
-        prefix: "nb-",
-        markdown: getMarkdown() || ident,
-        ansi: getAnsi() || ident,
-        VERSION: VERSION
-    };
-
-    // Inputs
-    nb.Input = function (raw, cell) {
+const katex = require('katex');
+katex.renderMathInElement = require('katex/dist/contrib/auto-render.min.js');
+class Input {
+    constructor(raw, cell) {
         this.raw = raw;
         this.cell = cell;
-    };
+    }
 
-    nb.Input.prototype.render = function () {
-        if (!this.raw.length) { return makeElement("div"); }
-        var holder = makeElement("div", [ "input" ]);
+    render () {
+        if (!this.raw.length) { return nb.makeElement("div"); }
+        var holder = nb.makeElement("div", [ "input" ]);
         var cell = this.cell;
         if (typeof cell.number === "number") {
             holder.setAttribute("data-prompt-number", this.cell.number);
         }
-        var pre_el = makeElement("pre");
-        var code_el = makeElement("code");
+        var pre_el = nb.makeElement("pre");
+        var code_el = nb.makeElement("code");
         var notebook = cell.worksheet.notebook;
         var m = notebook.metadata;
+        console.log(notebook);
         var lang = this.cell.raw.language || m.language || m.language_info.name;
         code_el.setAttribute("data-language", lang);
         code_el.className = "lang-" + lang;
-        code_el.innerHTML = escapeHTML(joinText(this.raw));
+        code_el.innerHTML = nb.escapeHTML(nb.joinText(this.raw));
         pre_el.appendChild(code_el);
         holder.appendChild(pre_el);
         this.el = holder;
         return holder;
-    };
+    }
+}
 
-    // Outputs and output-renderers
-    var imageCreator = function (format) {
+class Output {
+    constructor(raw, cell) {
+        this.raw = raw;
+        this.cell = cell;
+        this.type = raw.output_type;
+        this.display = {
+            "text/plain":  this.text,
+            "text/html":  this.genericJoinedText.bind(this, "html"),
+            "text/markdown":  this.marked,
+            "text/svg+xml":  this.genericJoinedText.bind(this, "svg"),
+            "text/latex":  this.genericJoinedText.bind(this, "latex"),
+            "application/javascript":  this.javascript,
+            "png":  this.imageCreator("png"),
+            "image/png":  this.imageCreator("png"),
+            "jpeg":  this.imageCreator("jpeg"),
+            "image/jpeg":  this.imageCreator("jpeg")
+        };
+        this.display_priority = [
+            "png", "image/png", "jpeg", "image/jpeg",
+            "svg", "text/svg+xml", "html", "text/html",
+            "text/markdown", "latex", "text/latex",
+            "javascript", "application/javascript",
+            "text", "text/plain"
+        ];
+    }
+
+    imageCreator(format) {
         return function (data) {
-            var el = makeElement("img", [ "image-output" ]);
-            el.src = "data:image/" + format + ";base64," + joinText(data).replace(/\n/g, "");
+            var el = nb.makeElement("img", [ "image-output" ]);
+            el.src = "data:image/" + format + ";base64," + nb.joinText(data).replace(/\n/g, "");
             return el;
         };
-    };
+    }
 
-    nb.display = {};
-    nb.display.text = function (text) {
-        var el = makeElement("pre", [ "text-output" ]);
-        el.innerHTML = escapeHTML(joinText(text));
+    text (text) {
+        var el = nb.makeElement("pre", [ "text-output" ]);
+        el.innerHTML = nb.escapeHTML(nb.joinText(text));
         return el;
-    };
-    nb.display["text/plain"] = nb.display.text;
+    }
+    marked(md) {
+        return this.genericJoinedText("html", nb.markdown(nb.joinText(md)));
+    }
 
-    nb.display.html = function (html) {
-        var el = makeElement("div", [ "html-output" ]);
-        el.innerHTML = joinText(html);
+    // applies to html, svg, latex
+    genericJoinedText(type, content) {
+        var el = nb.makeElement("div", [ type + "-output" ]);
+        el.innerHTML = nb.joinText(content);
         return el;
-    };
-    nb.display["text/html"] = nb.display.html;
+    }
 
-    nb.display.marked = function(md) {
-        return nb.display.html(nb.markdown(joinText(md)));
-    };
-    nb.display["text/markdown"] = nb.display.marked;
-
-    nb.display.svg = function (svg) {
-        var el = makeElement("div", [ "svg-output" ]);
-        el.innerHTML = joinText(svg);
+    javascript(js) {
+        var el = nb.makeElement("script");
+        el.innerHTML = js;
         return el;
-    };
-    nb.display["text/svg+xml"] = nb.display.svg;
+    }
 
-    nb.display.latex = function (latex) {
-        var el = makeElement("div", [ "latex-output" ]);
-        el.innerHTML = joinText(latex);
-        return el;
-    };
-    nb.display["text/latex"] = nb.display.latex;
-
-    nb.display.javascript = function (js) {
-        var el = makeElement("script");
-        script.innerHTML = js;
-        return el;
-    };
-    nb.display["application/javascript"] = nb.display.javascript;
-
-    nb.display.png = imageCreator("png");
-    nb.display["image/png"] = nb.display.png;
-    nb.display.jpeg = imageCreator("jpeg");
-    nb.display["image/jpeg"] = nb.display.jpeg;
-
-    nb.display_priority = [
-        "png", "image/png", "jpeg", "image/jpeg",
-        "svg", "text/svg+xml", "html", "text/html",
-        "text/markdown", "latex", "text/latex",
-        "javascript", "application/javascript",
-        "text", "text/plain"
-    ];
-
-    var render_display_data = function () {
+    render_display_data() {
         var o = this;
-        var formats = nb.display_priority.filter(function (d) {
+        var formats = this.display_priority.filter(function (d) {
             return o.raw.data ? o.raw.data[d] : o.raw[d];
         });
         var format = formats[0];
         if (format) {
-            if (nb.display[format]) {
-                return nb.display[format](o.raw[format] || o.raw.data[format]);
+            if (this.display[format]) {
+                return this.display[format](o.raw[format] || o.raw.data[format]);
             }
         }
-        return makeElement("div", [ "empty-output" ]);
-    };
+        return nb.makeElement("div", [ "empty-output" ]);
+    }
 
-    var render_error = function () {
-        var el = makeElement("pre", [ "pyerr" ]);
+    render_error() {
+        var el = nb.makeElement("pre", [ "pyerr" ]);
         var raw = this.raw.traceback.join("\n");
-        el.innerHTML = nb.ansi(escapeHTML(raw));
+        el.innerHTML = nb.ansi(nb.escapeHTML(raw));
         return el;
-    };
+    }
 
-    nb.Output = function (raw, cell) {
-        this.raw = raw;
-        this.cell = cell;
-        this.type = raw.output_type;
-    };
-
-    nb.Output.prototype.renderers = {
-        "display_data": render_display_data,
-        "execute_result": render_display_data,
-        "pyout": render_display_data,
-        "pyerr": render_error,
-        "error": render_error,
-        "stream": function () {
-            var el = makeElement("pre", [ (this.raw.stream || this.raw.name) ]);
-            var raw = joinText(this.raw.text);
-            el.innerHTML = nb.ansi(escapeHTML(raw));
-            return el;
-        }
-    };
-
-    nb.Output.prototype.render = function () {
-        var outer = makeElement("div", [ "output" ]);
+    render() {
+        var outer = nb.makeElement("div", [ "output" ]);
         if (typeof this.cell.number === "number") {
             outer.setAttribute("data-prompt-number", this.cell.number);
         }
-        var inner = this.renderers[this.type].call(this);
+        var inner;
+        switch(this.type) {
+            case "pyerr":
+                inner = this.render_error();
+                break;
+            case "error":
+                inner = this.render_error();
+                break;
+            case "stream":
+                inner = nb.makeElement("pre", [ (this.raw.stream || this.raw.name) ]);
+                var raw = nb.joinText(this.raw.text);
+                inner.innerHTML = nb.ansi(nb.escapeHTML(raw));
+                break;
+            default:
+                inner = this.render_display_data();
+                break;
+        }
         outer.appendChild(inner);
-        this.el = outer;
         return outer;
-    };
+    }
+}
 
-    // Post-processing
-    nb.coalesceStreams = function (outputs) {
+class Cell {
+    constructor(raw, worksheet) {
+        this.raw = raw;
+        this.worksheet = worksheet;
+        this.type = raw.cell_type;
+        if (this.type == "code") {
+            this.number = raw.prompt_number > -1 ? raw.prompt_number : raw.execution_count;
+        }
+        this.input = new nb.Input(raw.input || [ raw.source ], this);
+        var raw_outputs = (this.raw.outputs || []).map((output) => {
+            return new nb.Output(output, this);
+        });
+        this.outputs = this.coalesceStreams(raw_outputs);
+    }
+
+    coalesceStreams(outputs) {
         if (!outputs.length) { return outputs; }
         var last = outputs[0];
         var new_outputs = [ last ];
-        outputs.slice(1).forEach(function (o) {
+        outputs.slice(1).forEach((o) => {
             if (o.raw.output_type === "stream" &&
                 last.raw.output_type === "stream" &&
                 o.raw.stream === last.raw.stream) {
@@ -215,125 +165,98 @@
             }
         });
         return new_outputs;
-    };
+    }
 
-    // Cells
-    nb.Cell = function (raw, worksheet) {
-        var cell = this;
-        cell.raw = raw;
-        cell.worksheet = worksheet;
-        cell.type = raw.cell_type;
-        if (cell.type === "code") {
-            cell.number = raw.prompt_number > -1 ? raw.prompt_number : raw.execution_count;
-            var source = raw.input || [ raw.source ];
-            cell.input = new nb.Input(source, cell);
-            var raw_outputs = (cell.raw.outputs || []).map(function (o) {
-                return new nb.Output(o, cell);
-            });
-            cell.outputs = nb.coalesceStreams(raw_outputs);
+    render() {
+        var el = nb.makeElement("div", [ "cell", this.type + "-cell" ]);
+        switch(this.type) {
+            case "markdown":
+                console.log("Actual markdown");
+                // find TeX
+
+                el.innerHTML = nb.markdown(nb.joinText(this.raw.source));
+                nb.katex.renderMathInElement(el, {delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "$", right: "$", display: false}
+                ]});
+                console.log(el.innerHTML);
+                break;
+            case "code":
+                el.appendChild(this.input.render());
+                this.outputs.map((output) => el.appendChild(output.render()) );
+                break;
+            default:
+                el.innerHTML = nb.joinText(this.raw.source);
+                break;
         }
-    };
-
-    nb.Cell.prototype.renderers = {
-        markdown: function () {
-            var el = makeElement("div", [ "cell", "markdown-cell" ]);
-            el.innerHTML = nb.markdown(joinText(this.raw.source));
-            return el;
-        },
-        heading: function () {
-            var el = makeElement("h" + this.raw.level, [ "cell", "heading-cell" ]);
-            el.innerHTML = joinText(this.raw.source);
-            return el;
-        },
-        raw: function () {
-            var el = makeElement("div", [ "cell", "raw-cell" ]);
-            el.innerHTML = joinText(this.raw.source);
-            return el;
-        },
-        code: function () {
-            var cell_el = makeElement("div", [ "cell", "code-cell" ]);
-            cell_el.appendChild(this.input.render());
-            var output_els = this.outputs.forEach(function (o) {
-                cell_el.appendChild(o.render());
-            });
-            return cell_el;
-        }
-    };
-
-    nb.Cell.prototype.render = function () {
-        var el = this.renderers[this.type].call(this);
-        this.el = el;
         return el;
-    };
+    }
+}
 
-    // Worksheets
-    nb.Worksheet = function (raw, notebook) {
-        var worksheet = this;
+class Worksheet {
+    constructor(raw, notebook) {
         this.raw = raw;
         this.notebook = notebook;
-        this.cells = raw.cells.map(function (c) {
-            return new nb.Cell(c, worksheet);
-        });
-        this.render = function () {
-            var worksheet_el = makeElement("div", [ "worksheet" ]);
-            worksheet.cells.forEach(function (c) {
-                worksheet_el.appendChild(c.render());
-            });
-            this.el = worksheet_el;
-            return worksheet_el;
-        };
-    };
+        this.cells = raw.cells.map((cell) => new nb.Cell(cell, this) );
+    }
 
-    // Notebooks
-    nb.Notebook = function (raw, config) {
-        var notebook = this;
-        this.raw = raw;
+    render() {
+        let worksheet_el = nb.makeElement("div", ["worksheet"]);
+        this.cells.map((cell) => worksheet_el.appendChild(cell.render()) );
+        return worksheet_el;
+    }
+}
+
+class Notebook {
+    constructor(raw, config) {
         this.config = config;
-        var meta = this.metadata = raw.metadata;
-        this.title = meta.title || meta.name;
-        var _worksheets = raw.worksheets || [ { cells: raw.cells } ];
-        this.worksheets = _worksheets.map(function (ws) {
-            return new nb.Worksheet(ws, notebook);
-        });
+        this.raw = raw;
+        this.metadata = raw.metadata;
+        let worksheets = raw.worksheets || [ { cells: raw.cells } ];
+        this.worksheets = worksheets.map((ws) => new nb.Worksheet(ws, this));
         this.sheet = this.worksheets[0];
-    };
+    }
 
-    nb.Notebook.prototype.render = function () {
-        var notebook_el = makeElement("div", [ "notebook" ]);
-        this.worksheets.forEach(function (w) {
-            notebook_el.appendChild(w.render());
-        });
-        // skip if not in a browser. TODO: tweak either renderMathInElement to
-        // take a document arg, or implement in markdown func.
-        if(document !== undefined) {
-          renderMathInElement(notebook_el, {delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "\\(", right: "\\)", display: false}
-          ]});
-        }
-        this.el = notebook_el;
+    render() {
+        let notebook_el = nb.makeElement("div", [ "notebook" ]);
+        this.worksheets.forEach((w) => notebook_el.appendChild(w.render()) );
+
         return notebook_el;
-    };
-
-    nb.parse = function (nbjson, config) {
-        return new nb.Notebook(nbjson, config);
-    };
-
-    // Exports
-    if (typeof define === 'function' && define.amd) {
-        define(function() {
-            return nb;
-        });
     }
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = nb;
-        }
-        exports.nb = nb;
-    } else {
-        root.nb = nb;
-    }
+}
 
-}).call(this);
+var nb = {
+    prefix: 'nb-',
+    markdown: require('marked'),
+    ansi: require('ansi_up').ansi_to_html,
+    VERSION: VERSION,
+    ident(x) {
+        return x;
+    },
+
+    makeElement(tag, classNames) {
+        var el = document.createElement(tag);
+        el.className = (classNames || []).map((cn) => `${this.prefix}${cn}`);
+        return el;
+    },
+
+    escapeHTML(raw) {
+        return raw.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    },
+
+    joinText(text) {
+        return text.join ? text.map(nb.joinText).join("") : text;
+    },
+    parse: (nbjson, config) => new nb.Notebook(nbjson, config),
+    katex: katex
+};
+
+nb.Notebook = Notebook;
+nb.Worksheet = Worksheet;
+nb.Cell = Cell;
+nb.Output = Output;
+nb.Input = Input;
+
+module.exports = nb;
