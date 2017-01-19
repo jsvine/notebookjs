@@ -129,7 +129,7 @@
 
     nb.display.javascript = function (js) {
         var el = makeElement("script");
-        script.innerHTML = js;
+        el.innerHTML = js;
         return el;
     };
     nb.display["application/javascript"] = nb.display.javascript;
