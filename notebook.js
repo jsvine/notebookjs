@@ -74,7 +74,7 @@
         var code_el = makeElement("code");
         var notebook = cell.worksheet.notebook;
         var m = notebook.metadata;
-        var lang = this.cell.raw.language || m.language || m.language_info.name;
+        var lang = this.cell.raw.language || m.language || (m.language_info && m.language_info.name) || (m.kernelspec && m.kernelspec.name) || 'python';
         code_el.setAttribute("data-language", lang);
         code_el.className = "lang-" + lang;
         code_el.innerHTML = escapeHTML(joinText(this.raw));
