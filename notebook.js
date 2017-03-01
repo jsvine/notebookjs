@@ -244,6 +244,19 @@
         markdown: function () {
             var el = makeElement("div", [ "cell", "markdown-cell" ]);
             el.innerHTML = nb.markdown(joinText(this.raw.source));
+               /* Requires to render KaTeX
+                'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css',
+                'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js',
+               */
+              if (window.renderMathInElement != null) {
+                window.renderMathInElement(el, {delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "$", right: "$", display: false}
+                ]});
+              }
             return el;
         },
         heading: function () {
