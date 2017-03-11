@@ -13,5 +13,5 @@
     },
     "repository" : {"type": "git", "url": "git://github.com/jsvine/notebookjs.git"},
     "main" : "notebook.js",
-    "version" : "0.2.6"
+    "version" : "0.2.7"
 }
