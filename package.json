@@ -7,7 +7,7 @@
     "contributors" : [],
     "license": "MIT",
     "dependencies" : {
-        "jsdom": ">=4.0.0",
+        "jsdom": "9.x",
         "marked": ">=0.3.3",
         "ansi_up": ">=1.1.3"
     },
