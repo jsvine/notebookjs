@@ -65,4 +65,5 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@bradhowes](https://github.com/bradhowes)
 - [@HavenZhang](https://github.com/HavenZhang)
 - [@mrueegg](https://github.com/mrueegg)
+- [@jithurjacob](https://github.com/jithurjacob)
 - [@rubenv](https://github.com/rubenv)
