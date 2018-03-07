@@ -20,7 +20,7 @@
 		"tests"
 	],
     "dependencies" : {
-        "jsdom": ">=4.0.0",
+        "jsdom": ">=11.6.2",
         "marked": ">=0.3.3",
         "ansi_up": ">=1.1.3"
     }

@@ -22,9 +22,7 @@ var rendered = notebook.render();
 document.body.appendChild(rendered);
 ```
 
-### IO.js Usage
-
-*Note: To take advantage of `jsdom`'s latest features/bugfixes, `notebook.js` now runs on [io.js](https://iojs.org/) instead of Node.js.*
+### Node.js Usage
 
 To install:
 

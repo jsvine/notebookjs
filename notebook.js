@@ -1,12 +1,16 @@
-// notebook.js 0.2.7
+// notebook.js 0.2.8
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.2.7";
+    var VERSION = "0.2.8";
 
     // Get browser or JSDOM document
-    var doc = root.document || require("jsdom").jsdom();
+    var doc = root.document;
+    if (!doc) {
+        var jsdom = require("jsdom");
+        doc = new jsdom.JSDOM().window.document;
+    }
 
     // Helper functions
     var ident = function (x) { return x; };

@@ -1,4 +1,4 @@
-#!/usr/bin/env iojs
+#!/usr/bin/env node
 // Reads a notebook from stdin, prints the rendered HTML to stdout
 var fs = require("fs");
 var nb = require("../notebook.js");
