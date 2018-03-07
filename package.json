@@ -1,6 +1,6 @@
 {
     "name": "notebookjs",
-    "version": "0.2.7",
+    "version": "0.3.0",
     "description": "Parse and render IPython/Jupyter notebooks.",
     "main": "notebook.js",
     "homepage": "https://github.com/jsvine/notebookjs",
