@@ -119,6 +119,7 @@
         return el;
     };
     nb.display["text/svg+xml"] = nb.display.svg;
+    nb.display["image/svg+xml"] = nb.display.svg;
 
     nb.display.latex = function (latex) {
         var el = makeElement("div", [ "latex-output" ]);
@@ -141,7 +142,7 @@
 
     nb.display_priority = [
         "png", "image/png", "jpeg", "image/jpeg",
-        "svg", "text/svg+xml", "html", "text/html",
+        "svg", "image/svg+xml", "text/svg+xml", "html", "text/html",
         "text/markdown", "latex", "text/latex",
         "javascript", "application/javascript",
         "text", "text/plain"
