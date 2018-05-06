@@ -58,6 +58,7 @@
         prefix: "nb-",
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
+        highlighter: ident,
         VERSION: VERSION
     };
 
@@ -81,7 +82,7 @@
         var lang = this.cell.raw.language || m.language || m.language_info.name;
         code_el.setAttribute("data-language", lang);
         code_el.className = "lang-" + lang;
-        code_el.innerHTML = escapeHTML(joinText(this.raw));
+        code_el.innerHTML = nb.highlighter(escapeHTML(joinText(this.raw)), pre_el, code_el, lang);
         pre_el.appendChild(code_el);
         holder.appendChild(pre_el);
         this.el = holder;
@@ -169,7 +170,7 @@
     var render_error = function () {
         var el = makeElement("pre", [ "pyerr" ]);
         var raw = this.raw.traceback.join("\n");
-        el.innerHTML = nb.ansi(escapeHTML(raw));
+        el.innerHTML = nb.highlighter(nb.ansi(escapeHTML(raw)), el);
         return el;
     };
 
@@ -188,7 +189,7 @@
         "stream": function () {
             var el = makeElement("pre", [ (this.raw.stream || this.raw.name) ]);
             var raw = joinText(this.raw.text);
-            el.innerHTML = nb.ansi(escapeHTML(raw));
+            el.innerHTML = nb.highlighter(nb.ansi(escapeHTML(raw)), el);
             return el;
         }
     };
