@@ -1,9 +1,9 @@
-// notebook.js 0.3.1
+// notebook.js 0.3.2
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.3.1";
+    var VERSION = "0.3.2";
 
     // Get browser or JSDOM document
     var doc = root.document;
@@ -79,7 +79,7 @@
         var code_el = makeElement("code");
         var notebook = cell.worksheet.notebook;
         var m = notebook.metadata;
-        var lang = this.cell.raw.language || m.language || m.language_info.name;
+        var lang = this.cell.raw.language || m.language || (m.kernelspec && m.kernelspec.language) || (m.language_info && m.language_info.name);
         code_el.setAttribute("data-language", lang);
         code_el.className = "lang-" + lang;
         code_el.innerHTML = nb.highlighter(escapeHTML(joinText(this.raw)), pre_el, code_el, lang);
