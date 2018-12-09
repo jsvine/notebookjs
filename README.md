@@ -98,7 +98,7 @@ Notebook.js currently doesn't support MathJax. Implementation suggestions welcom
 
 ## Styling Rendered Notebooks
 
-The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. See [NBPreview](https://github.com/jsvine/nbpreview/css) for an example implementation.
+The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. See [`nbpreview`](https://github.com/jsvine/nbpreview)'s [stylesheet](https://github.com/jsvine/nbpreview/blob/master/css/nbpreview.css) for an example implementation.
 
 ## Thanks
 
