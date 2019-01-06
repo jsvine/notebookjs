@@ -305,6 +305,9 @@
     };
 
     nb.Notebook.prototype.render = function () {
+		if (this.config && this.config.markdown){
+			nb.markdown.setOptions(this.config.markdown);
+		}
         var notebook_el = makeElement("div", [ "notebook" ]);
         this.worksheets.forEach(function (w) {
             notebook_el.appendChild(w.render()); 
