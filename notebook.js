@@ -48,8 +48,7 @@
     };
 
     var getAnsi = function () {
-        var req = condRequire("ansi_up");
-        var lib = root.ansi_up || req; 
+        var lib = root.ansi_up || condRequire("ansi_up");
         return lib && lib.ansi_to_html;
     };
 

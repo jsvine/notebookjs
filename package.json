@@ -9,7 +9,7 @@
         "jupyter"
     ],
     "author": "Jeremy Singer-Vine <jsvine@gmail.com>",
-    "contributors": [],
+    "contributors": ["Victor Antoniazzi <vgsantoniazzi@gmail.com>"],
     "license": "MIT",
     "dependencies": {
         "ansi_up": ">=1.1.3",

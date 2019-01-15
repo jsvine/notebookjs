@@ -109,3 +109,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@mrueegg](https://github.com/mrueegg)
 - [@jithurjacob](https://github.com/jithurjacob)
 - [@rubenv](https://github.com/rubenv)
+- [@vgsantoniazzi](https://github.com/vgsantoniazzi)
