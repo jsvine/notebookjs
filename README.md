@@ -22,6 +22,16 @@ var rendered = notebook.render();
 document.body.appendChild(rendered);
 ```
 
+You also can read a remote file with promise.
+
+```
+nb.readRemoteNotebookFile(url).then(function(file){
+    var notebook = nb.parse(file);
+    var rendered = notebook.render();
+    document.body.appendChild(rendered);
+})
+```
+
 ### Node.js Usage
 
 To install:

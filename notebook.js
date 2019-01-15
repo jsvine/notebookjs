@@ -67,6 +67,15 @@
         this.cell = cell;
     };
 
+    nb.readRemoteNotebookFile = function (file) {
+        return fetch(file)
+        .then(function(response){
+            return response.json()
+        }).then(function(response) {
+            return response;
+        })
+    };
+
     nb.Input.prototype.render = function () {
         if (!this.raw.length) { return makeElement("div"); }
         var holder = makeElement("div", [ "input" ]);
