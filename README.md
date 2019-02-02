@@ -1,4 +1,4 @@
-# notebook.js `v0.3.2`
+# notebook.js `v0.4.0`
 
 Notebook.js parses raw [Jupyter](http://jupyter.org/)/[IPython](http://ipython.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
@@ -92,9 +92,13 @@ A `highlighter` function takes up to four arguments:
 
 The function should at least return the original `text` value if it cannot perform any highlighting.
 
-## MathJax 
+## MathJax / LaTeX / KaTeX
 
-Notebook.js currently doesn't support MathJax. Implementation suggestions welcome. (Markdown-parsing was interfering with prior attempts.)
+Notebook.js currently doesn't support all of MathJax's syntaxes (MathML, AsciiMath, LaTeX). In the browser, however, it does support a significant subset of LaTeX via [KaTeX](https://github.com/Khan/KaTeX). To enable this functionality, the webpage must have the following JavaScript and CSS libraries (or their equivalents, from other sources) loaded:
+
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js`
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css`
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js`
 
 ## Styling Rendered Notebooks
 
@@ -109,3 +113,5 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@mrueegg](https://github.com/mrueegg)
 - [@jithurjacob](https://github.com/jithurjacob)
 - [@rubenv](https://github.com/rubenv)
+- [@Sumukh](https://github.com/Sumukh)
+- [@H-Plus-Time](https://github.com/H-Plus-Time)
