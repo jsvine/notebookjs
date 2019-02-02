@@ -3,7 +3,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.3.2";
+    var VERSION = "0.4.0";
 
     // Get browser or JSDOM document
     var doc = root.document;
@@ -244,6 +244,21 @@
         markdown: function () {
             var el = makeElement("div", [ "cell", "markdown-cell" ]);
             el.innerHTML = nb.markdown(joinText(this.raw.source));
+
+            /* Requires to render KaTeX
+            'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js',
+            */
+            if (root.renderMathInElement != null) {
+                root.renderMathInElement(el, {delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "$", right: "$", display: false}
+                ]});
+            }
+
             return el;
         },
         heading: function () {
