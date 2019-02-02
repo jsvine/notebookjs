@@ -1,9 +1,9 @@
-// notebook.js 0.3.2
+// notebook.js 0.4.1
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.4.0";
+    var VERSION = "0.4.1";
 
     // Get browser or JSDOM document
     var doc = root.document;
@@ -48,8 +48,7 @@
     };
 
     var getAnsi = function () {
-        var req = condRequire("ansi_up");
-        var lib = root.ansi_up || req; 
+        var lib = root.ansi_up || condRequire("ansi_up");
         return lib && lib.ansi_to_html;
     };
 
