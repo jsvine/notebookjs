@@ -1,9 +1,9 @@
-// notebook.js 0.4.1
+// notebook.js 0.4.2
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var root = this;
-    var VERSION = "0.4.1";
+    var VERSION = "0.4.2";
 
     // Get browser or JSDOM document
     var doc = root.document;
@@ -309,7 +309,7 @@
         var notebook = this;
         this.raw = raw;
         this.config = config;
-        var meta = this.metadata = raw.metadata;
+        var meta = this.metadata = raw.metadata || {};
         this.title = meta.title || meta.name;
         var _worksheets = raw.worksheets || [ { cells: raw.cells } ];
         this.worksheets = _worksheets.map(function (ws) {

@@ -1,4 +1,4 @@
-# notebook.js `v0.4.1`
+# notebook.js `v0.4.2`
 
 Notebook.js parses raw [Jupyter](http://jupyter.org/)/[IPython](http://ipython.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
@@ -116,3 +116,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@Sumukh](https://github.com/Sumukh)
 - [@H-Plus-Time](https://github.com/H-Plus-Time)
 - [@vgsantoniazzi](https://github.com/vgsantoniazzi)
+- [@dereklieu](https://github.com/dereklieu)
