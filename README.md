@@ -17,7 +17,7 @@ First, provide access to `nb` via a script tag:
 Then parse, render, and (perhaps) append:
 
 ```
-var notebook = nb.parse(raw_ipynb_json_string);
+var notebook = nb.parse(JSON.parse(raw_ipynb_json_string));
 var rendered = notebook.render();
 document.body.appendChild(rendered);
 ```
