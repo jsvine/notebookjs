@@ -58,6 +58,7 @@
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
         highlighter: ident,
+        sanitiser: ident,
         VERSION: VERSION
     };
 
@@ -107,7 +108,7 @@
 
     nb.display.html = function (html) {
         var el = makeElement("div", [ "html-output" ]);
-        el.innerHTML = joinText(html);
+        el.innerHTML = nb.sanitiser(joinText(html));
         return el;
     };
     nb.display["text/html"] = nb.display.html;
