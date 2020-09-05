@@ -1,15 +1,19 @@
-// notebook.js 0.4.2
+// notebook.js 0.5.0
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
+    var VERSION = "0.5.0";
     var root = this;
-    var VERSION = "0.4.2";
+    var isBrowser = root.window !== undefined;
+    var doc;
 
     // Get browser or JSDOM document
-    var doc = root.document;
-    if (!doc) {
+    if (isBrowser) {
+        doc = root.document;
+    } else {
         var jsdom = require("jsdom");
-        doc = new jsdom.JSDOM().window.document;
+        var dom = new jsdom.JSDOM();
+        doc = dom.window.document;
     }
 
     // Helper functions
@@ -52,13 +56,23 @@
         return lib && lib.ansi_to_html;
     };
 
+    var getSanitzer = function () {
+        if (isBrowser) {
+            var lib = root.DOMPurify || condRequire("dompurify");
+            return lib && lib.sanitize;
+        } else {
+            var createDOMPurify = condRequire("dompurify");
+            return createDOMPurify(dom.window).sanitize;
+        }
+    };
+
     // Set up `nb` namespace
     var nb = {
         prefix: "nb-",
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
+        sanitizer: getSanitzer() || ident,
         highlighter: ident,
-        sanitiser: ident,
         VERSION: VERSION
     };
 
@@ -108,7 +122,7 @@
 
     nb.display.html = function (html) {
         var el = makeElement("div", [ "html-output" ]);
-        el.innerHTML = nb.sanitiser(joinText(html));
+        el.innerHTML = nb.sanitizer(joinText(html));
         return el;
     };
     nb.display["text/html"] = nb.display.html;
