@@ -1,4 +1,4 @@
-# notebook.js `v0.4.2`
+# notebook.js `v0.5.0`
 
 Notebook.js parses raw [Jupyter](http://jupyter.org/)/[IPython](http://ipython.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
@@ -42,17 +42,21 @@ console.log(notebook.render().outerHTML);
 
 ## Markdown and ANSI-coloring
 
-By default, notebook.js supports [marked](https://github.com/chjj/marked) for Markdown rendering, and [ansi_up](https://github.com/drudru/ansi_up) for ANSI-coloring. It does not, however, ship with those libraries, so you must `<script>`-include or `require` them before initializing notebook.js.
+On Node.js, notebook.js uses [marked](https://github.com/chjj/marked) for Markdown rendering, and [ansi_up](https://github.com/drudru/ansi_up) for ANSI-coloring.
+
+The browser-based version does not, however, ship with those libraries, so you must `<script>`-include or `require` them before initializing notebook.js.
 
 To support other Markdown or ANSI-coloring engines, set `nb.markdown` and/or `nb.ansi` to functions that accept raw text and return rendered text.
 
+## HTML Sanitization
+
+On Node.js, notebook.js runs all `"text/html"`-type outputs through [DOMPurify](https://github.com/cure53/DOMPurify). The browser-based version, however, does not ship with this library; to enable the default behavior, you must `<script>`-include or `require` it before initializing notebook.js.
+
+Alternative sanitizers can be passed by setting `nb.sanitizer` to a function that accepts a raw HTML string and returns a sanitized version. (To disable sanitization, set `nb.sanitizer = function (x) { return x; };`.)
+
 ## Code-Highlighting
 
-Notebook.js plays well with code-highlighting libraries. See [NBPreview](https://github.com/jsvine/nbpreview)
-for an example of how to add support for your preferred highlighter. However, if you wish to inject your own
-highlighting, you can install a custom highlighter function by adding it under the `highlighter` name in an
-`notebookjs` instance. For instance, here is an implementation which colorizes languages using
-[Prismjs](http://prismjs.com) during page generation for a static site:
+Notebook.js plays well with code-highlighting libraries. See [NBPreview](https://github.com/jsvine/nbpreview) for an example of how to add support for your preferred highlighter. However, if you wish to inject your own highlighting, you can install a custom highlighter function by adding it under the `highlighter` name in an `notebookjs` instance. For instance, here is an implementation which colorizes languages using [Prismjs](http://prismjs.com) during page generation for a static site:
 
 ```js
 var Prism = require('prismjs');
@@ -96,9 +100,9 @@ The function should at least return the original `text` value if it cannot perfo
 
 Notebook.js currently doesn't support all of MathJax's syntaxes (MathML, AsciiMath, LaTeX). In the browser, however, it does support a significant subset of LaTeX via [KaTeX](https://github.com/Khan/KaTeX). To enable this functionality, the webpage must have the following JavaScript and CSS libraries (or their equivalents, from other sources) loaded:
 
-- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js`
-- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css`
-- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js`
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js`
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css`
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js`
 
 ## Styling Rendered Notebooks
 
@@ -117,3 +121,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@H-Plus-Time](https://github.com/H-Plus-Time)
 - [@vgsantoniazzi](https://github.com/vgsantoniazzi)
 - [@dereklieu](https://github.com/dereklieu)
+- [@micmcg](https://github.com/micmcg)
