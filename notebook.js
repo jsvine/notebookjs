@@ -1,8 +1,8 @@
-// notebook.js 0.5.0
+// notebook.js 0.5.1
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
-    var VERSION = "0.5.0";
+    var VERSION = "0.5.1";
     var root = this;
     var isBrowser = root.window !== undefined;
     var doc;
@@ -56,7 +56,7 @@
         return lib && lib.ansi_to_html;
     };
 
-    var getSanitzer = function () {
+    var getSanitizer = function () {
         if (isBrowser) {
             var lib = root.DOMPurify || condRequire("dompurify");
             return lib && lib.sanitize;
@@ -71,7 +71,7 @@
         prefix: "nb-",
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
-        sanitizer: getSanitzer() || ident,
+        sanitizer: getSanitizer() || ident,
         highlighter: ident,
         VERSION: VERSION
     };

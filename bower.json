@@ -1,6 +1,6 @@
 {
 	"name": "notebookjs",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "Parse and render IPython/Jupyter notebooks.",
 	"main": "notebook.js",
 	"authors": [
