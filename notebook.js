@@ -1,8 +1,8 @@
-// notebook.js 0.5.1
+// notebook.js 0.5.2
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
-    var VERSION = "0.5.1";
+    var VERSION = "0.5.2";
     var root = this;
     var isBrowser = root.window !== undefined;
     var doc;
@@ -25,7 +25,7 @@
             return nb.prefix + cn;
         }).join(" ");
         return el;
-    }; 
+    };
 
     var escapeHTML = function (raw) {
         var replaced = raw
@@ -38,8 +38,8 @@
         if (text.join) {
             return text.map(joinText).join("");
         } else {
-            return text;    
-        } 
+            return text;
+        }
     };
 
     // Get supporting libraries
@@ -48,7 +48,7 @@
     };
 
     var getMarkdown = function () {
-        return root.marked || condRequire("marked"); 
+        return root.marked || condRequire("marked");
     };
 
     var getAnsi = function () {
@@ -78,7 +78,7 @@
 
     // Inputs
     nb.Input = function (raw, cell) {
-        this.raw = raw; 
+        this.raw = raw;
         this.cell = cell;
     };
 
@@ -101,7 +101,7 @@
         holder.appendChild(pre_el);
         this.el = holder;
         return holder;
-    }; 
+    };
 
     // Outputs and output-renderers
     var imageCreator = function (format) {
@@ -131,7 +131,7 @@
         return nb.display.html(nb.markdown(joinText(md)));
     };
     nb.display["text/markdown"] = nb.display.marked;
-    
+
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
         el.innerHTML = joinText(svg);
@@ -189,7 +189,7 @@
     };
 
     nb.Output = function (raw, cell) {
-        this.raw = raw; 
+        this.raw = raw;
         this.cell = cell;
         this.type = raw.output_type;
     };
@@ -213,7 +213,7 @@
         if (typeof this.cell.number === "number") {
             outer.setAttribute("data-prompt-number", this.cell.number);
         }
-        var inner = this.renderers[this.type].call(this); 
+        var inner = this.renderers[this.type].call(this);
         outer.appendChild(inner);
         this.el = outer;
         return outer;
@@ -227,7 +227,8 @@
         outputs.slice(1).forEach(function (o) {
             if (o.raw.output_type === "stream" &&
                 last.raw.output_type === "stream" &&
-                o.raw.stream === last.raw.stream) {
+                o.raw.stream === last.raw.stream &&
+                o.raw.name === last.raw.name) {
                 last.raw.text = last.raw.text.concat(o.raw.text);
             } else {
                 new_outputs.push(o);
@@ -248,7 +249,7 @@
             var source = raw.input || [ raw.source ];
             cell.input = new nb.Input(source, cell);
             var raw_outputs = (cell.raw.outputs || []).map(function (o) {
-                return new nb.Output(o, cell); 
+                return new nb.Output(o, cell);
             });
             cell.outputs = nb.coalesceStreams(raw_outputs);
         }
@@ -296,7 +297,7 @@
     };
 
     nb.Cell.prototype.render = function () {
-        var el = this.renderers[this.type].call(this); 
+        var el = this.renderers[this.type].call(this);
         this.el = el;
         return el;
     };
@@ -312,7 +313,7 @@
         this.render = function () {
             var worksheet_el = makeElement("div", [ "worksheet" ]);
             worksheet.cells.forEach(function (c) {
-                worksheet_el.appendChild(c.render()); 
+                worksheet_el.appendChild(c.render());
             });
             this.el = worksheet_el;
             return worksheet_el;
@@ -336,12 +337,12 @@
     nb.Notebook.prototype.render = function () {
         var notebook_el = makeElement("div", [ "notebook" ]);
         this.worksheets.forEach(function (w) {
-            notebook_el.appendChild(w.render()); 
+            notebook_el.appendChild(w.render());
         });
         this.el = notebook_el;
         return notebook_el;
     };
-    
+
     nb.parse = function (nbjson, config) {
         return new nb.Notebook(nbjson, config);
     };
@@ -360,5 +361,5 @@
     } else {
         root.nb = nb;
     }
-    
+
 }).call(this);
