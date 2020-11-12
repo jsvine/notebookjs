@@ -122,3 +122,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@vgsantoniazzi](https://github.com/vgsantoniazzi)
 - [@dereklieu](https://github.com/dereklieu)
 - [@micmcg](https://github.com/micmcg)
+- [@mhrvol](https://github.com/mhrvol)
