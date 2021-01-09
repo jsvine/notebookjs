@@ -1,4 +1,4 @@
-# notebook.js `v0.5.2`
+# notebook.js `v0.6.0`
 
 Notebook.js parses raw [Jupyter](http://jupyter.org/)/[IPython](http://ipython.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
@@ -101,8 +101,9 @@ The function should at least return the original `text` value if it cannot perfo
 Notebook.js currently doesn't support all of MathJax's syntaxes (MathML, AsciiMath, LaTeX). In the browser, however, it does support a significant subset of LaTeX via [KaTeX](https://github.com/Khan/KaTeX). To enable this functionality, the webpage must have the following JavaScript and CSS libraries (or their equivalents, from other sources) loaded:
 
 - `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js`
-- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css`
 - `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js`
+- `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css`
+- [KaTeX fonts](https://katex.org/docs/font.html)
 
 ## Styling Rendered Notebooks
 
@@ -123,3 +124,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@dereklieu](https://github.com/dereklieu)
 - [@micmcg](https://github.com/micmcg)
 - [@mhrvol](https://github.com/mhrvol)
+- [@ingodahn](https://github.com/ingodahn)

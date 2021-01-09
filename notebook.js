@@ -1,8 +1,8 @@
-// notebook.js 0.5.2
+// notebook.js 0.6.0
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
-    var VERSION = "0.5.2";
+    var VERSION = "0.6.0";
     var root = this;
     var isBrowser = root.window !== undefined;
     var doc;
@@ -255,35 +255,38 @@
         }
     };
 
+    var math_delimiters = [
+        {left: "$$", right: "$$", display: true},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "$", right: "$", display: false}
+    ];
+
     nb.Cell.prototype.renderers = {
         markdown: function () {
             var el = makeElement("div", [ "cell", "markdown-cell" ]);
-            el.innerHTML = nb.markdown(joinText(this.raw.source));
 
-            /* Requires to render KaTeX
-            'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js',
-            */
+            var joined = joinText(this.raw.source);
+
+            // Pre-render math via KaTeX's auto-render extension, if available
             if (root.renderMathInElement != null) {
-                root.renderMathInElement(el, {delimiters: [
-                    {left: "$$", right: "$$", display: true},
-                    {left: "\\[", right: "\\]", display: true},
-                    {left: "\\(", right: "\\)", display: false},
-                    {left: "$", right: "$", display: false}
-                ]});
+                el.innerHTML = nb.sanitizer(joined);
+                root.renderMathInElement(el, { delimiters: math_delimiters });
+                el.innerHTML = nb.sanitizer(nb.markdown(el.innerHTML));
+            } else {
+                el.innerHTML = nb.sanitizer(nb.markdown(joined));
             }
 
             return el;
         },
         heading: function () {
             var el = makeElement("h" + this.raw.level, [ "cell", "heading-cell" ]);
-            el.innerHTML = joinText(this.raw.source);
+            el.innerHTML = nb.sanitizer(joinText(this.raw.source));
             return el;
         },
         raw: function () {
             var el = makeElement("div", [ "cell", "raw-cell" ]);
-            el.innerHTML = joinText(this.raw.source);
+            el.innerHTML = escapeHTML(joinText(this.raw.source));
             return el;
         },
         code: function () {
