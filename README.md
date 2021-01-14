@@ -48,9 +48,9 @@ The browser-based version does not, however, ship with those libraries, so you m
 
 To support other Markdown or ANSI-coloring engines, set `nb.markdown` and/or `nb.ansi` to functions that accept raw text and return rendered text.
 
-## HTML Sanitization
+## HTML and Markdown Sanitization
 
-On Node.js, notebook.js runs all `"text/html"`-type outputs through [DOMPurify](https://github.com/cure53/DOMPurify). The browser-based version, however, does not ship with this library; to enable the default behavior, you must `<script>`-include or `require` it before initializing notebook.js.
+On Node.js, notebook.js runs all HTML and Markdown outputs through [DOMPurify](https://github.com/cure53/DOMPurify). The browser-based version, however, does not ship with this library; to enable the default behavior, you must `<script>`-include or `require` it before initializing notebook.js.
 
 Alternative sanitizers can be passed by setting `nb.sanitizer` to a function that accepts a raw HTML string and returns a sanitized version. (To disable sanitization, set `nb.sanitizer = function (x) { return x; };`.)
 
