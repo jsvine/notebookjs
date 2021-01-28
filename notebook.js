@@ -1,8 +1,7 @@
-// notebook.js 0.6.0
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
-    var VERSION = "0.6.0";
+    var VERSION = "0.6.1";
     var root = this;
     var isBrowser = root.window !== undefined;
     var doc;
