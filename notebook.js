@@ -42,26 +42,21 @@
     };
 
     // Get supporting libraries
-    var condRequire = function (module_name) {
-        return typeof require === "function" && require(module_name);
-    };
-
     var getMarkdown = function () {
-        return root.marked || condRequire("marked");
+        return root.marked || (typeof require === "function" && require("marked"));
     };
 
     var getAnsi = function () {
-        var lib = root.ansi_up || condRequire("ansi_up");
+        var lib = root.ansi_up || (typeof require === "function" && require("ansi_up"));
         return lib && lib.ansi_to_html;
     };
 
     var getSanitizer = function () {
+        var lib = root.DOMPurify || (typeof require === "function" && require("dompurify"));
         if (isBrowser) {
-            var lib = root.DOMPurify || condRequire("dompurify");
             return lib && lib.sanitize;
         } else {
-            var createDOMPurify = condRequire("dompurify");
-            return createDOMPurify(dom.window).sanitize;
+            return lib(dom.window).sanitize;
         }
     };
 
