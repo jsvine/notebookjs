@@ -14,7 +14,7 @@
     "dependencies": {
         "jsdom": "^16.4.0",
         "marked": "^2.0.0",
-        "ansi_up": "^4.0.4",
+        "ansi_up": "^5.0.0",
         "dompurify": "^2.2.6"
     },
     "repository": {
