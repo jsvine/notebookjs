@@ -1,6 +1,6 @@
 {
     "name": "notebookjs",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "description": "Parse and render Jupyter/IPython notebooks.",
     "main": "notebook.js",
     "homepage": "https://github.com/jsvine/notebookjs",
@@ -12,10 +12,10 @@
     "contributors": [],
     "license": "MIT",
     "dependencies": {
-        "jsdom": "^16.4.0",
-        "marked": "^2.0.0",
         "ansi_up": "^5.0.0",
-        "dompurify": "^2.2.6"
+        "dompurify": "^2.2.6",
+        "jsdom": "^16.4.0",
+        "marked": "^2.0.0"
     },
     "repository": {
         "type": "git",
