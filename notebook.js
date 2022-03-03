@@ -1,7 +1,7 @@
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
-    var VERSION = "0.6.6";
+    var VERSION = "0.6.7";
     var root = this;
     var isBrowser = root.window !== undefined;
     var doc;
@@ -109,7 +109,7 @@
     nb.display = {};
     nb.display.text = function (text) {
         var el = makeElement("pre", [ "text-output" ]);
-        el.innerHTML = escapeHTML(joinText(text));
+        el.innerHTML = nb.highlighter(nb.ansi(joinText(text)), el);
         return el;
     };
     nb.display["text/plain"] = nb.display.text;
