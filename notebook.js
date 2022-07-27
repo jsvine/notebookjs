@@ -122,7 +122,7 @@
     nb.display["text/html"] = nb.display.html;
 
     nb.display.marked = function(md) {
-        return nb.display.html(nb.markdown(joinText(md)));
+        return nb.display.html(nb.markdown.parse(joinText(md)));
     };
     nb.display["text/markdown"] = nb.display.marked;
 
@@ -266,12 +266,12 @@
             if (root.renderMathInElement != null) {
                 el.innerHTML = nb.sanitizer(joined);
                 root.renderMathInElement(el, { delimiters: math_delimiters });
-                el.innerHTML = nb.sanitizer(nb.markdown(
+                el.innerHTML = nb.sanitizer(nb.markdown.parse(
                     el.innerHTML
                     .replace(/&gt;/g, ">") // Necessary to enable blockquote syntax
                 ));
             } else {
-                el.innerHTML = nb.sanitizer(nb.markdown(joined));
+                el.innerHTML = nb.sanitizer(nb.markdown.parse(joined));
             }
 
             return el;
