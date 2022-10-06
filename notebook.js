@@ -1,7 +1,7 @@
 // http://github.com/jsvine/notebookjs
 // notebook.js may be freely distributed under the MIT license.
 (function () {
-    var VERSION = "0.6.7";
+    var VERSION = "0.7.0";
     var root = this;
     var isBrowser = root.window !== undefined;
     var doc;
@@ -43,7 +43,8 @@
 
     // Get supporting libraries
     var getMarkdown = function () {
-        return root.marked || (typeof require === "function" && require("marked"));
+        var lib = root.marked || (typeof require === "function" && require("marked"));
+        return lib && lib.parse;
     };
 
     var getAnsi = function () {

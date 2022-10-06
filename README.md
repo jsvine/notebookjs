@@ -1,4 +1,4 @@
-# notebook.js `v0.6.7`
+# notebook.js `v0.7.0`
 
 Notebook.js parses raw [Jupyter](http://jupyter.org/)/[IPython](http://ipython.org/) notebooks, and lets you render them as HTML. See a __[working demo here](https://jsvine.github.io/nbpreview/)__.
 
@@ -42,7 +42,7 @@ console.log(notebook.render().outerHTML);
 
 ## Markdown and ANSI-coloring
 
-On Node.js, notebook.js uses [marked](https://github.com/chjj/marked) for Markdown rendering, and [ansi_up](https://github.com/drudru/ansi_up) for ANSI-coloring.
+On Node.js, notebook.js uses [marked](https://github.com/markedjs/marked) for Markdown rendering, and [ansi_up](https://github.com/drudru/ansi_up) for ANSI-coloring.
 
 The browser-based version does not, however, ship with those libraries, so you must `<script>`-include or `require` them before initializing notebook.js.
 
@@ -125,3 +125,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@micmcg](https://github.com/micmcg)
 - [@mhrvol](https://github.com/mhrvol)
 - [@ingodahn](https://github.com/ingodahn)
+- [@srmibextesting](https://github.com/srmibextesting)
