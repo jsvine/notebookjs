@@ -126,3 +126,4 @@ Many thanks to the following users for catching bugs, fixing typos, and proposin
 - [@mhrvol](https://github.com/mhrvol)
 - [@ingodahn](https://github.com/ingodahn)
 - [@srmibextesting](https://github.com/srmibextesting)
+- [@roman-mibex-2](https://github.com/roman-mibex-2)
