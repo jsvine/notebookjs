@@ -61,12 +61,19 @@
         }
     };
 
+    var javaScriptRender = function(script){
+        var el = makeElement("script");
+        el.innerHTML = script;
+        return el;
+    }
+
     // Set up `nb` namespace
     var nb = {
         prefix: "nb-",
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
         sanitizer: getSanitizer() || ident,
+        javaScriptRender: javaScriptRender,
         highlighter: ident,
         VERSION: VERSION
     };
@@ -143,9 +150,7 @@
     nb.display["text/latex"] = nb.display.latex;
 
     nb.display.javascript = function (js) {
-        var el = makeElement("script");
-        el.innerHTML = joinText(js);
-        return el;
+        return nb.javaScriptRender(joinText(js))
     };
     nb.display["application/javascript"] = nb.display.javascript;
 
