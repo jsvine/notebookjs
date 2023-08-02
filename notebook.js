@@ -138,6 +138,12 @@
     nb.display.latex = function (latex) {
         var el = makeElement("div", [ "latex-output" ]);
         el.innerHTML = joinText(latex);
+        if (root.renderMathInElement != null) {
+            el.innerText = joinText(latex);
+            root.renderMathInElement(el, { delimiters: math_delimiters });
+        } else {
+            el.innerText = joinText(latex);
+        }
         return el;
     };
     nb.display["text/latex"] = nb.display.latex;
