@@ -113,7 +113,7 @@ If you want to disable or control the JavaScript executed, set the `javaScriptRe
 var nb = require("notebookjs");
 // Show the JavaScript instead of executing it
 np.javaScriptRender = function(javaScript){
-        var el = makeElement("pre");
+        var el = document.createElement("pre");
         el.innerText = javaScript;
         return el;
 }
