@@ -67,6 +67,7 @@
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
         sanitizer: getSanitizer() || ident,
+        executeJavaScript: false,
         highlighter: ident,
         VERSION: VERSION
     };
@@ -143,9 +144,15 @@
     nb.display["text/latex"] = nb.display.latex;
 
     nb.display.javascript = function (js) {
-        var el = makeElement("script");
-        el.innerHTML = joinText(js);
-        return el;
+        if(nb.executeJavaScript){
+            var el = makeElement("script");
+            el.innerHTML = joinText(js);
+            return el;
+        } else {
+            var el = document.createElement("pre");
+            el.innerText = "JavaScript execution is disabled for this notebook";
+            return el;
+        }
     };
     nb.display["application/javascript"] = nb.display.javascript;
 
