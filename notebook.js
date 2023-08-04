@@ -61,19 +61,13 @@
         }
     };
 
-    var javaScriptRender = function(script){
-        var el = makeElement("script");
-        el.innerHTML = script;
-        return el;
-    }
-
     // Set up `nb` namespace
     var nb = {
         prefix: "nb-",
         markdown: getMarkdown() || ident,
         ansi: getAnsi() || ident,
         sanitizer: getSanitizer() || ident,
-        javaScriptRender: javaScriptRender,
+        executeJavaScript: false,
         highlighter: ident,
         VERSION: VERSION
     };
@@ -150,7 +144,15 @@
     nb.display["text/latex"] = nb.display.latex;
 
     nb.display.javascript = function (js) {
-        return nb.javaScriptRender(joinText(js))
+        if(nb.executeJavaScript){
+            var el = makeElement("script");
+            el.innerHTML = joinText(js);
+            return el;
+        } else {
+            var el = document.createElement("pre");
+            el.innerText = "JavaScript execution is disabled for this notebook";
+            return el;
+        }
     };
     nb.display["application/javascript"] = nb.display.javascript;
 

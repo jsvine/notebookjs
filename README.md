@@ -106,17 +106,14 @@ Notebook.js currently doesn't support all of MathJax's syntaxes (MathML, AsciiMa
 - [KaTeX fonts](https://katex.org/docs/font.html)
 
 ## JavaScript Support
-JavaScript in notebooks is executed by default. This opens you up for XSS attacks if you render untrusted notebooks.
-If you want to disable or control the JavaScript executed, set the `javaScriptRender` function.
+JavaScript in notebooks is not executed by default, because it opens the door for XSS attacks when using untrusted notebooks.
+If you want to enable to run JavaScript set the `executeJavaScript` option to true.
 
 ```
 var nb = require("notebookjs");
-// Show the JavaScript instead of executing it
-np.javaScriptRender = function(javaScript){
-        var el = document.createElement("pre");
-        el.innerText = javaScript;
-        return el;
-}
+// Run the JavaScript in notebook. Ensure you only use this for trusted notebooks
+np.executeJavaScript = true;
+var notebook = nb.parse(ipynb);
 ```
 
 ## Styling Rendered Notebooks
