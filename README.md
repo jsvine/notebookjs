@@ -112,7 +112,7 @@ If you want to enable to run JavaScript set the `executeJavaScript` option to tr
 ```
 var nb = require("notebookjs");
 // Run the JavaScript in notebook. Ensure you only use this for trusted notebooks
-np.executeJavaScript = true;
+nb.executeJavaScript = true;
 var notebook = nb.parse(ipynb);
 ```
 
