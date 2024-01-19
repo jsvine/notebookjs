@@ -130,7 +130,7 @@
 
     nb.display.svg = function (svg) {
         var el = makeElement("div", [ "svg-output" ]);
-        el.innerHTML = joinText(svg);
+        el.innerHTML = nb.sanitizer(joinText(svg));
         return el;
     };
     nb.display["text/svg+xml"] = nb.display.svg;
@@ -138,7 +138,7 @@
 
     nb.display.latex = function (latex) {
         var el = makeElement("div", [ "latex-output" ]);
-        el.innerHTML = joinText(latex);
+        el.innerText = joinText(latex).replace(/\n/g,"");
         return el;
     };
     nb.display["text/latex"] = nb.display.latex;
