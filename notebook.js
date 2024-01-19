@@ -111,7 +111,7 @@
     nb.display = {};
     nb.display.text = function (text) {
         var el = makeElement("pre", [ "text-output" ]);
-        el.innerHTML = nb.sanitizer(nb.highlighter(nb.ansi(joinText(text)), el));
+        el.innerHTML = nb.highlighter(nb.ansi(escapeHTML(joinText(text))), el);
         return el;
     };
     nb.display["text/plain"] = nb.display.text;
