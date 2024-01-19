@@ -105,6 +105,17 @@ Notebook.js currently doesn't support all of MathJax's syntaxes (MathML, AsciiMa
 - `https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css`
 - [KaTeX fonts](https://katex.org/docs/font.html)
 
+## JavaScript Support
+JavaScript in notebooks is not executed by default, because it opens the door for XSS attacks when using untrusted notebooks.
+If you want to enable to run JavaScript set the `executeJavaScript` option to true.
+
+```
+var nb = require("notebookjs");
+// Run the JavaScript in notebook. Ensure you only use this for trusted notebooks
+nb.executeJavaScript = true;
+var notebook = nb.parse(ipynb);
+```
+
 ## Styling Rendered Notebooks
 
 The HTML rendered by notebook.js (intentionally) does not contain any styling. But each key element has fairly straightfoward CSS classes that make styling your notebooks a cinch. See [`nbpreview`](https://github.com/jsvine/nbpreview)'s [stylesheet](https://github.com/jsvine/nbpreview/blob/master/css/nbpreview.css) for an example implementation.
