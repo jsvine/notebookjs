@@ -2,7 +2,7 @@
 // notebook.js may be freely distributed under the MIT license.
 (function () {
     var VERSION = "0.8.2";
-    var root = this;
+    var root = this || globalThis;
     var isBrowser = root.window !== undefined;
     var doc;
 
