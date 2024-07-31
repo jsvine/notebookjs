@@ -33,7 +33,7 @@ npm install notebookjs
 Then parse, render, and write:
 
 ```js
-var fs = require ("fs");
+var fs = require("fs");
 var nb = require("notebookjs");
 var ipynb = JSON.parse(fs.readFileSync("path/to/notebook.ipynb"));
 var notebook = nb.parse(ipynb);
