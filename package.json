@@ -11,6 +11,9 @@
     "author": "Jeremy Singer-Vine <jsvine@gmail.com>",
     "contributors": [],
     "license": "MIT",
+    "scripts": {
+        "uglify": "uglifyjs notebook.js -o notebook.min.js"
+    },
     "dependencies": {
         "ansi_up": "^6.0.2",
         "dompurify": "^3.0.8",
