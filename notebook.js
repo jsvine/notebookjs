@@ -28,8 +28,11 @@
 
     var escapeHTML = function (raw) {
         var replaced = raw
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
+            .replaceAll(/&/g, "&amp;")
+            .replaceAll(/</g, "&lt;")
+            .replaceAll(/>/g, "&gt;")
+            .replaceAll(/"/g, "&quot;")
+            .replaceAll(/'/g, "&#39;");
         return replaced;
     };
 
@@ -65,7 +68,8 @@
     var nb = {
         prefix: "nb-",
         markdown: getMarkdown() || ident,
-        ansi: getAnsi() || ident,
+        // ansi_up already escapes HTML, so we only call escapeHTML if ansi_up is not available
+        ansi: getAnsi() || escapeHTML,
         sanitizer: getSanitizer() || ident,
         executeJavaScript: false,
         highlighter: ident,
@@ -111,7 +115,7 @@
     nb.display = {};
     nb.display.text = function (text) {
         var el = makeElement("pre", [ "text-output" ]);
-        el.innerHTML = nb.highlighter(nb.ansi(escapeHTML(joinText(text))), el);
+        el.innerHTML = nb.highlighter(nb.ansi(joinText(text)), el);
         return el;
     };
     nb.display["text/plain"] = nb.display.text;
@@ -191,7 +195,7 @@
     var render_error = function () {
         var el = makeElement("pre", [ "pyerr" ]);
         var raw = this.raw.traceback.join("\n");
-        el.innerHTML = nb.highlighter(nb.ansi(escapeHTML(raw)), el);
+        el.innerHTML = nb.highlighter(nb.ansi(raw), el);
         return el;
     };
 
@@ -210,7 +214,7 @@
         "stream": function () {
             var el = makeElement("pre", [ (this.raw.stream || this.raw.name) ]);
             var raw = joinText(this.raw.text);
-            el.innerHTML = nb.highlighter(nb.ansi(escapeHTML(raw)), el);
+            el.innerHTML = nb.highlighter(nb.ansi(raw), el);
             return el;
         }
     };
